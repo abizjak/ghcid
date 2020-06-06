@@ -24,6 +24,11 @@
 
 (setq ghcid-process-name "ghcid")
 
+(defcustom ghcid-use-projectile t
+  "Whether ghcid should use projectile to discover the project root."
+  :type 'boolean
+  :group 'ghcid
+  )
 
 (define-minor-mode ghcid-mode
   "A minor mode for ghcid terminals
@@ -136,7 +141,9 @@ exactly. See `ghcid-mode'."
 The process will be started in the directory of the buffer where
 you ran this command from."
   (interactive)
-  (ghcid-start default-directory))
+  (if ghcid-use-projectile
+      (ghcid-start (projectile-project-root))
+    (ghcid-start default-directory)))
 
 ;; Assumes that only one window is open
 (defun ghcid-stop ()
